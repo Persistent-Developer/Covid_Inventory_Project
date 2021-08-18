@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>com.psl</groupId>
-	<artifactId>Covid_Inventory_App</artifactId>
+	<artifactId>Covid_Inventory_Project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Covid_Inventory_Project</name>
 	<description>Demo project for Spring Boot</description>
