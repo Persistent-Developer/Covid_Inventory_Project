@@ -59,6 +59,21 @@ public class StoreBreaks {
 			return "BreakTimings [id=" + id + ", breakFrom=" + breakFrom + ", breakTo=" + breakTo + ", breakType="
 					+ breakType + "]";
 		}
+
+		public StoreBreaks(Integer id, String breakFrom, String breakTo, String breakType) {
+			super();
+			this.id = id;
+			this.breakFrom = breakFrom;
+			this.breakTo = breakTo;
+			this.breakType = breakType;
+		}
+
+		public StoreBreaks() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+		
+		
 	
 	
 }

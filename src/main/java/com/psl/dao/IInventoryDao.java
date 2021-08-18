@@ -29,10 +29,10 @@ public interface IInventoryDao extends CrudRepository<Inventory, Integer>{
 	List<Inventory> findByGroup(String name);
 
 	@Query(value="select i.* from inventory i join store s on i.fk5_storeid=s.id where i.product_code=?1",nativeQuery = true)
-	public Inventory findByProduct_code(String product_code);
+	public Inventory findByProductCode(String product_code);
 	
 	@Query(value="select * from inventory i where i.product_code=?1",nativeQuery = true)
-	public Inventory findByProduct_code1(String product_code);
+	public Inventory findByProductCode1(String product_code);
 
 	
 	

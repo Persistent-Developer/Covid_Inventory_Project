@@ -54,144 +54,144 @@ public class InventoryService {
 			return inventoryDao.save(item);
 		}
 	}
-//	
-//	
-//	public void store(MultipartFile file) {
-//		try {
-//
-//			ExcelUtils util = new ExcelUtils(inventoryDao);
-//			util.parseInventoryExcelFile(file.getInputStream());
-//			
-//        } catch (IOException e) {
-//        	throw new RuntimeException("FAIL! -> message = " + e.getMessage());
-//        }
-//	}
-//	
-//
-//	public List<Inventory> getAllProducts() throws Exception
-//	{
-//		return inventoryDao.getAllProducts();
-//	}
-//	
-//	
-//	public Inventory getProducts(String code) throws Exception
-//	{
-//		return inventoryDao.findByProduct_code(code);
-//	}
-//	
-//	
-//	public Inventory getProductsById(int id) throws Exception
-//	{	
-//		return inventoryDao.findById(id).get();
-//	}
-//	
-//	
+	
+	
+	public void store(MultipartFile file) {
+		try {
+
+			ExcelUtils util = new ExcelUtils(inventoryDao);
+			util.parseInventoryExcelFile(file.getInputStream());
+			
+        } catch (IOException e) {
+        	throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+        }
+	}
+	
+
+	public List<Inventory> getAllProducts() throws Exception
+	{
+		return inventoryDao.getAllProducts();
+	}
+	
+	
+	public Inventory getProducts(String code) throws Exception
+	{
+		return inventoryDao.findByProductCode(code);
+	}
+	
+	
+	public Inventory getProductsById(int id) throws Exception
+	{	
+		return inventoryDao.findById(id).get();
+	}
+	
+	
 	public void removeProducts(int id) throws Exception
 	{
 		inventoryDao.deleteById(id);
 	}
-//	
-//	public List<String> findAll(int id) throws Exception
-//	{
-//		return inventoryDao.findAllbyID(id);
-//	}
-//	
-//	public List<String> findAllGroups(int id) throws Exception
-//	{
-//		return inventoryDao.findAllGroups(id);
-//	}
-//	
-//	public List<Inventory> findByCategory(String name[]) throws Exception
-//	{
-//		List<Inventory> ilist=new ArrayList<>();
-//		
-//		for(String nam:name)
-//		{
-//			List<Inventory> list=inventoryDao.findByCategory(nam);
-//		
-//			for(Inventory i:list)
-//			{
-//				ilist.add(i);
-//			}
-//		}
-//		
-//		return ilist;	
-//	}
-//	
-//	
-//	public List<Inventory> findByGroup(String name[]) throws Exception
-//	{
-//		List<Inventory> ilist=new ArrayList<>();
-//		
-//		for(String nam:name)
-//		{
-//			List<Inventory> list=inventoryDao.findByGroup(nam);
-//		
-//			for(Inventory i:list)
-//			{
-//				ilist.add(i);
-//			}
-//		}
-//		
-//		return ilist;	
-//	}
-//	
-//	public List<Inventory> findByMultipleValues1(String name,String category[],String group[],int id) throws Exception
-//	{
-//		List<Inventory> ilist=new ArrayList<>();
-//		
-//		for(String cat:category)
-//		{
-//			for(String grp:group)
-//			{
-//				List<Inventory> list=inventoryDao.findByMultipleValues1(name,cat,grp,id);
-//				
-//				for(Inventory i:list)
-//				{
-//					ilist.add(i);
-//				}
-//			}
-//		}
-//		return ilist;
-//	}
-//	
-//	
-//	public List<Inventory> findByMultipleValues2(String name,String group[],int id) throws Exception
-//	{
-//		List<Inventory> ilist=new ArrayList<>();
-//		
-//		for(String grp:group)
-//		{
-//			List<Inventory> list=inventoryDao.findByMultipleValues2(name,grp,id);
-//				
-//			for(Inventory i:list)
-//			{
-//				ilist.add(i);
-//			}
-//		}
-//		return ilist;
-//	}
-//	
-//	public List<Inventory> findByMultipleValues3(String name,String category[],int id) throws Exception
-//	{
-//		List<Inventory> ilist=new ArrayList<>();
-//		
-//		for(String cat:category)
-//		{
-//			List<Inventory> list=inventoryDao.findByMultipleValues3(name,cat,id);
-//				
-//			for(Inventory i:list)
-//			{
-//				ilist.add(i);
-//			}
-//		}
-//		return ilist;
-//	}
-//	
-//	public List<Inventory> findByMultipleValues4(String name,int id) throws Exception
-//	{
-//		return inventoryDao.findByMultipleValues4(name,id);
-//	}
-//	
+	
+	public List<String> findAll(int id) throws Exception
+	{
+		return inventoryDao.findAllbyID(id);
+	}
+	
+	public List<String> findAllGroups(int id) throws Exception
+	{
+		return inventoryDao.findAllGroups(id);
+	}
+	
+	public List<Inventory> findByCategory(String name[]) throws Exception
+	{
+		List<Inventory> ilist=new ArrayList<>();
+		
+		for(String nam:name)
+		{
+			List<Inventory> list=inventoryDao.findByCategory(nam);
+		
+			for(Inventory i:list)
+			{
+				ilist.add(i);
+			}
+		}
+		
+		return ilist;	
+	}
+	
+	
+	public List<Inventory> findByGroup(String name[]) throws Exception
+	{
+		List<Inventory> ilist=new ArrayList<>();
+		
+		for(String nam:name)
+		{
+			List<Inventory> list=inventoryDao.findByGroup(nam);
+		
+			for(Inventory i:list)
+			{
+				ilist.add(i);
+			}
+		}
+		
+		return ilist;	
+	}
+	
+	public List<Inventory> findByMultipleValues1(String name,String category[],String group[],int id) throws Exception
+	{
+		List<Inventory> ilist=new ArrayList<>();
+		
+		for(String cat:category)
+		{
+			for(String grp:group)
+			{
+				List<Inventory> list=inventoryDao.findByMultipleValues1(name,cat,grp,id);
+				
+				for(Inventory i:list)
+				{
+					ilist.add(i);
+				}
+			}
+		}
+		return ilist;
+	}
+	
+	
+	public List<Inventory> findByMultipleValues2(String name,String group[],int id) throws Exception
+	{
+		List<Inventory> ilist=new ArrayList<>();
+		
+		for(String grp:group)
+		{
+			List<Inventory> list=inventoryDao.findByMultipleValues2(name,grp,id);
+				
+			for(Inventory i:list)
+			{
+				ilist.add(i);
+			}
+		}
+		return ilist;
+	}
+	
+	public List<Inventory> findByMultipleValues3(String name,String category[],int id) throws Exception
+	{
+		List<Inventory> ilist=new ArrayList<>();
+		
+		for(String cat:category)
+		{
+			List<Inventory> list=inventoryDao.findByMultipleValues3(name,cat,id);
+				
+			for(Inventory i:list)
+			{
+				ilist.add(i);
+			}
+		}
+		return ilist;
+	}
+	
+	public List<Inventory> findByMultipleValues4(String name,int id) throws Exception
+	{
+		return inventoryDao.findByMultipleValues4(name,id);
+	}
+	
 	
 }

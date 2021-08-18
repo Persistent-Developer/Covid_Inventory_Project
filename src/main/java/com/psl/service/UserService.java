@@ -88,19 +88,24 @@ public class UserService {
 //---------------------------------------------------------------------------	
 
 	
-	/*
-	 * public List<User> getAllUser() { return (List<User>) dao.findAll(); }
-	 * 
-	 * public void store(MultipartFile file) { try {
-	 * 
-	 * ExcelUtils util = new ExcelUtils(dao);
-	 * util.parseUserExcelFile(file.getInputStream());
-	 * 
-	 * //List<User> lstUsers = ExcelUtils.parseUserExcelFile(file.getInputStream());
-	 * 
-	 * //dao.saveAll(lstUsers); } catch (IOException e) { throw new
-	 * RuntimeException("FAIL! -> message = " + e.getMessage()); } }
-	 */
+	
+	  public List<User> getAllUser() { 
+		  return (List<User>) dao.findAll(); 
+	  }
+	  
+	  public void store(MultipartFile file) { 
+		  try {
+			  ExcelUtils util = new ExcelUtils(dao);
+			  util.parseUserExcelFile(file.getInputStream());
+	  
+	  //List<User> lstUsers = ExcelUtils.parseUserExcelFile(file.getInputStream());
+	  
+	  //dao.saveAll(lstUsers); 
+			  } catch (IOException e) { 
+				  throw new RuntimeException("FAIL! -> message = " + e.getMessage()); 
+			  } 
+	  }
+	 
 	
 	public String updateUserById(User user, int id) {
 		try {

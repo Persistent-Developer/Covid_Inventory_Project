@@ -114,18 +114,23 @@ public class UserController {
 //---------------------------------------------------------------------------
 
 
-	/*
-	 * @PostMapping("/user/uploadFile") public List<User>
-	 * uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file) {
-	 * LOGGER.info("Called : /user/uploadFile      to add multiple users"); try {
-	 * service.store(file);
-	 * 
-	 * } catch (Exception e) { e.printStackTrace(); } List<User> uList =
-	 * service.getAllUser();
-	 * 
-	 * //return "file updated succesfully"; //return service.getAllUser(); return
-	 * uList; }
-	 */
+	
+	  @PostMapping("/user/uploadFile") 
+	  public List<User> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file) {
+		  LOGGER.info("Called : /user/uploadFile      to add multiple users"); 
+		  try {
+			  service.store(file);
+		  
+		  } catch (Exception e) { 
+			  e.printStackTrace(); 
+		  } 
+		  List<User> uList = service.getAllUser();
+		  
+	  //return "file updated succesfully"; 
+		  //return service.getAllUser(); 
+		  return uList; 
+	}
+	 
 
 	@PostMapping("/user/change/emailid/{id}")
 	public String changeEmail(@RequestBody ObjectNode objectNode,@PathVariable int id)
