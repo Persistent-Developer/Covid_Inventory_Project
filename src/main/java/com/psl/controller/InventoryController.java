@@ -72,6 +72,7 @@ public class InventoryController {
 	@PutMapping("/inventory/uploadFile")
     public ResponseEntity<?> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file/*, Model model*/) {
 		LOGGER.info("Called : /inventory/uploadFile");
+		
 		List<Inventory> prodList = new ArrayList<>();
 		try {
 			LOGGER.info("Inserting inventory");
@@ -115,151 +116,201 @@ public class InventoryController {
 	
 	//Get all products
 	@GetMapping("/inventory")
-	public ResponseEntity<List<Inventory>> getAllProducts()
+	public ResponseEntity<Response<List<Inventory>>> getAllProducts()
 	{
 		List<Inventory> list = null;
+		Response<List<Inventory>> response = new Response<List<Inventory>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
+		
 		try {
 			LOGGER.debug("In getAllProducts controller...");
 			list=inventoryService.getAllProducts();
+			
+			if(list.size()<=0)
+			{
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setResult(list);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.of(Optional.of(list));
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+		}	
 	}
 
 	
 	//Get products based on their product id
 	@GetMapping("/inventory/id")
-	public ResponseEntity<Inventory> getProducts(@PathVariable(name="Prdouct_id") int id)
+	public ResponseEntity<Response<Inventory>> getProducts(@PathVariable(name="Prdouct_id") int id)
 	{
 		Inventory int1=null;
+		Response<Inventory> response = new Response<Inventory>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		
 		try {
 			LOGGER.debug("In get products controller using id...");
 			int1=inventoryService.getProductsById(id);
+			if(int1==null)
+			{
+				return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setResult(int1);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
 		}
-		if(int1==null)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.of(Optional.of(int1));
 	}
 	
 	
 	//Get products based on their product code
 	@GetMapping("/inventory/product")
-	public ResponseEntity<Inventory> getProducts(@RequestParam String product_code)
+	public ResponseEntity<Response<Inventory>> getProducts(@RequestParam String product_code)
 	{
 		Inventory int1=null;
+		
+		Response<Inventory> response = new Response<Inventory>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		
 		try {
 			LOGGER.debug("In getProducts controller based on product code...");
 			int1=inventoryService.getProducts(product_code);
+			
+			if(int1==null)
+			{
+				return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setResult(int1);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
 		}
-		if(int1==null)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.of(Optional.of(int1));	
+	
 	}
 	
 	
 	//Get all categories based on store id
 	@GetMapping("/inventory/categories")
-	public ResponseEntity<List<String>> findAllbyID(@RequestParam int store_id)
+	public ResponseEntity<Response<List<String>>> findAllbyID(@RequestParam int store_id)
 	{
 		List<String> list=null;
+		Response<List<String>> response = new Response<List<String>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		try {
 			LOGGER.debug("In get all categories controller using store id...");
 			list=inventoryService.findAll(store_id);
+			if(list.size()<=0)
+			{
+				return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setResult(list);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
 		}
-		
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		return ResponseEntity.of(Optional.of(list));
 	}
 	
 	
 	//Get all Groups based on store id
 	@GetMapping("/inventory/groups")
-	public ResponseEntity<List<String>> findAllGroups(@RequestParam int store_id)
+	public ResponseEntity<Response<List<String>>> findAllGroups(@RequestParam int store_id)
 	{
 		List<String> list = null;
+		Response<List<String>> response = new Response<List<String>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		try {
 			LOGGER.debug("In get all groups controller using store id...");
 			list=inventoryService.findAllGroups(store_id);
+		
+			if(list.size()<=0)
+			{
+				return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
+			}
+		
+			response.setResult(list);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-			
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
 		}
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		return ResponseEntity.of(Optional.of(list));
 	}
 	
 	
 	//Get products based on categories
 	@GetMapping("/inventory/category")
-	public ResponseEntity<List<Inventory>> findAllbyCategory(@RequestParam(name="category_name") String name[])
+	public ResponseEntity<Response<List<Inventory>>> findAllbyCategory(@RequestParam(name="category_name") String name[])
 	{
 		List<Inventory> list=null;
+		Response<List<Inventory>> response = new Response<List<Inventory>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		
 		try {
 			LOGGER.debug("In get products controller based on categories...");
-		 list=inventoryService.findByCategory(name);
+			list=inventoryService.findByCategory(name);
+			if(list.size()<=0)
+			{
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setResult(list);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-		
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.of(Optional.of(list)); 
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+		}	 
 	}
 	
 	
 	//To retrive products based on multiple values
 	@GetMapping("/inventory/search")
-	public ResponseEntity<List<Inventory>> findByMultipleValues(@RequestParam("product_name") String name,@RequestParam(name="category",required=false)String category[],@RequestParam(name="product_group",required=false)String group[],@RequestParam("store_id") int id)
+	public ResponseEntity<Response<List<Inventory>>> findByMultipleValues(@RequestParam("product_name") String name,@RequestParam(name="category",required=false)String category[],@RequestParam(name="product_group",required=false)String group[],@RequestParam("store_id") int id)
 	{
 		List<Inventory> list= null;
+		Response<List<Inventory>> response = new Response<List<Inventory>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		try {
 			LOGGER.debug("In get products controller using multiple values...");
 			if(category!= null && group!=null)
@@ -278,44 +329,55 @@ public class InventoryController {
 			{
 				list = inventoryService.findByMultipleValues4(name,id);
 			}		
+			
+			if(list.size()<=0)
+			{
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+			}
+		
+			response.setResult(list);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 		}
-		
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.of(Optional.of(list));
 	}
 	
 	
 	//Get products based on Group
 	@GetMapping("/inventory/group")
-	public ResponseEntity<List<Inventory>> findAllbyGroups(@RequestParam(name="product_group") String group[])
+	public ResponseEntity<Response<List<Inventory>>> findAllbyGroups(@RequestParam(name="product_group") String group[])
 	{
 		List<Inventory> list=null;
-			
+		Response<List<Inventory>> response = new Response<List<Inventory>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
+		
 		try {
 			LOGGER.debug("In get products controller based on group...");
 			 list=inventoryService.findByGroup(group);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	
-		if(list.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+			 
+			 if(list.size()<=0)
+				{
+					return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+				}
 			
-		return ResponseEntity.of(Optional.of(list)); 
+				response.setResult(list);
+				response.setTotalElements(inventoryService.getAllProducts().size());
+				response.setStatus(200);
+				response.setstatusMessage("SUCCESS");
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.OK);
+			}
+			catch(Exception e)
+			{
+				response.setstatusMessage(e.getMessage());
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+			} 
 	}
 	
 	

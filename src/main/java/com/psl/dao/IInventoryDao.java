@@ -14,7 +14,7 @@ import com.sun.istack.NotNull;
 public interface IInventoryDao extends CrudRepository<Inventory, Integer>{
 	
 	
-	@Query(value="select distinct i.category from inventory i join store s on i.fk5_storeid=s.id where s.id=?1",nativeQuery = true)
+	@Query(value="select distinct i.category from inventory i join store s on i.store=s.id where s.id=?1",nativeQuery = true)
 	public List<String> findAllbyID(int id);
 	
 	/*
