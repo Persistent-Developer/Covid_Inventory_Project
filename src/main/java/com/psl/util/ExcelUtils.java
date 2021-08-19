@@ -43,7 +43,9 @@ public class ExcelUtils {
 	}
 
 
-	public  void parseInventoryExcelFile(InputStream is) {
+	public  List<Inventory> parseInventoryExcelFile(InputStream is) {
+		List<Inventory> inventoryList= new ArrayList<>();
+		Inventory item=new Inventory();
 		try {
 			LOGGER.debug("In parseInventoryExcelFile() method.....");
     		Workbook workbook = new XSSFWorkbook(is);
@@ -96,7 +98,8 @@ public class ExcelUtils {
 	    						int updateStock = (int) st.getNumericCellValue() + i.getStock();
 	    						System.out.println("--");
 	    						i.setStock(updateStock);
-	    						dao.save(i);
+	    						item=dao.save(i);
+	    						inventoryList.add(item);
 	    						flag=1;
 	    						break;
 	    					}
@@ -171,13 +174,18 @@ public class ExcelUtils {
     			}
     	
     			if(flag==0)
-    				dao.save(invt);
+    			{	
+    				item=dao.save(invt);
+    				inventoryList.add(item);
+    				
+    			}
+    			
     			rowNumber++;
     		}
     		
 
     		workbook.close();
-    		
+    		return inventoryList;
 
         } catch (IOException e) {
         	throw new RuntimeException("FAIL! -> message = " + e.getMessage());

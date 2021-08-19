@@ -60,11 +60,11 @@ public class InventoryService {
 	}
 	
 	
-	public void store(MultipartFile file) {
+	public List<Inventory> store(MultipartFile file) {
 		try {
 			LOGGER.debug("In store() funtion of inventory service ....");
 			ExcelUtils util = new ExcelUtils(inventoryDao);
-			util.parseInventoryExcelFile(file.getInputStream());
+			return util.parseInventoryExcelFile(file.getInputStream());
 			
         } catch (IOException e) {
         	LOGGER.info("Error while parsing inventory excel file ...");

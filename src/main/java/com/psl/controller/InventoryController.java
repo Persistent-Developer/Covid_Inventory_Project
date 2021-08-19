@@ -72,23 +72,32 @@ public class InventoryController {
 	
 	//post products using excel file
 	@PutMapping("/inventory/uploadFile")
-    public ResponseEntity<?> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file/*, Model model*/) {
+	 public ResponseEntity<Response<List<Inventory>>> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file/*, Model model*/) {
 		LOGGER.info("Called : /inventory/uploadFile");
-		
+		Response<List<Inventory>> response = new Response<List<Inventory>>();
+		response.setStatus(404);
+		response.setstatusMessage("Data Not Found");
 		List<Inventory> prodList = new ArrayList<>();
 		try {
 			LOGGER.info("Inserting inventory");
-			inventoryService.store(file);
+			prodList = inventoryService.store(file);
 			
-			prodList = inventoryService.getAllProducts();
+			if(prodList.size()<=0)
+			{
+				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}   
-		
-		return new ResponseEntity<>(prodList,HttpStatus.OK);
+			response.setResult(prodList);
+			response.setTotalElements(inventoryService.getAllProducts().size());
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.OK);
+		}
+		catch(Exception e)
+		{
+			response.setstatusMessage(e.getMessage());
+			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
+		}
     }
 	
 	
