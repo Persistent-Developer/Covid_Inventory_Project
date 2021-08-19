@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","Handler"})
 public class StoreBreaks {
 
 	    @Id
@@ -72,8 +75,4 @@ public class StoreBreaks {
 			super();
 			// TODO Auto-generated constructor stub
 		}
-		
-		
-	
-	
 }

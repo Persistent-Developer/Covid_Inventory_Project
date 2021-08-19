@@ -126,14 +126,14 @@ public class Store {
 	}
 
 
-//	public Set<StoreBreaks> getBreakTimings() {
-//		return breakTimings;
-//	}
-//
-//
-//	public void setBreakTimings(Set<StoreBreaks> breakTimings) {
-//		this.breakTimings = breakTimings;
-//	}
+	public Set<StoreBreaks> getBreakTimings() {
+		return breakTimings;
+	}
+
+
+	public void setBreakTimings(Set<StoreBreaks> breakTimings) {
+		this.breakTimings = breakTimings;
+	}
 
 
 	public Set<StoreHoliday> getStoreHolidays() {
