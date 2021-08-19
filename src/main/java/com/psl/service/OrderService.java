@@ -12,7 +12,7 @@ public class OrderService {
 	@Autowired
 	public IOrderDao dao;
 
-	public void placeOrder(Orders o) {
-		dao.save(o);
+	public Orders placeOrder(Orders o) throws Exception {
+		return dao.save(o);
 	}
 }

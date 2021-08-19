@@ -44,6 +44,8 @@ public class InventoryController {
 	//Post single product into the inventory
 	@PostMapping("/inventory")
 	public ResponseEntity<Response<Inventory>> addProducts(@RequestBody Inventory inventory) throws Exception {
+		
+		LOGGER.info("Called : /inventory          to add single product");
 		Response<Inventory> response = new Response<Inventory>();
 		response.setStatus(404);
 		response.setstatusMessage("Unable to add item to inventory");

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,8 @@ import com.psl.util.ExcelUtils;
 
 @Service("service")
 public class InventoryService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(InventoryService.class);
 
 	@Autowired
 	private IInventoryDao inventoryDao;
@@ -58,11 +62,12 @@ public class InventoryService {
 	
 	public void store(MultipartFile file) {
 		try {
-
+			LOGGER.debug("In store() funtion of inventory service ....");
 			ExcelUtils util = new ExcelUtils(inventoryDao);
 			util.parseInventoryExcelFile(file.getInputStream());
 			
         } catch (IOException e) {
+        	LOGGER.info("Error while parsing inventory excel file ...");
         	throw new RuntimeException("FAIL! -> message = " + e.getMessage());
         }
 	}

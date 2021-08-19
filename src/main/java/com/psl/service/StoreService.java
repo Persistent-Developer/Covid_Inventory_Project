@@ -16,17 +16,17 @@ public class StoreService {
 	@Autowired
 	private IStoreDao dao;
 	
-	public void addStore(Store store)
+	public Store addStore(Store store) throws Exception
 	{
-		dao.save(store);
+		return dao.save(store);
 	}
 	
-	public Store findById(int id)
+	public Store findById(int id) throws Exception
 	{
 		return dao.findById(id).get();
 	}
 	
-	public List<Store> getAllStore()
+	public List<Store> getAllStore() throws Exception
 	{
 		List<Store> storelist=new ArrayList<>();
 		Iterable<Store> iterablelist = dao.findAll();

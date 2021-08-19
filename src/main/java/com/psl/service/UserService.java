@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,10 +19,12 @@ import com.psl.util.ExcelUtils;
 @Service("UserService")
 public class UserService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+	
 	@Autowired
 	private IUserDAO dao;
 	
-	public void addUser(User user)
+	public User addUser(User user)
 	{
 		Role role = user.getRole();
 		if(role.getRoleId()== 1) {
@@ -34,7 +37,7 @@ public class UserService {
 			role.setRoleName("Customer");
 		}
 
-		dao.save(user);
+		return dao.save(user);
 	}
 
 //---------------------------------------------------------------------------	
@@ -70,6 +73,7 @@ public class UserService {
 	public String deleteUserById(int id)
 	{
 		try {
+			LOGGER.debug("In deleteUserById() function ...");
 		User user = dao.findById(id).get();
 		
 		if(user.getUserId() == id)
@@ -95,6 +99,7 @@ public class UserService {
 	  
 	  public void store(MultipartFile file) { 
 		  try {
+			  LOGGER.debug("In store() function of user service ...");
 			  ExcelUtils util = new ExcelUtils(dao);
 			  util.parseUserExcelFile(file.getInputStream());
 	  
@@ -102,6 +107,7 @@ public class UserService {
 	  
 	  //dao.saveAll(lstUsers); 
 			  } catch (IOException e) { 
+				  LOGGER.info("Error while parsing user excel file ..");
 				  throw new RuntimeException("FAIL! -> message = " + e.getMessage()); 
 			  } 
 	  }
@@ -109,6 +115,7 @@ public class UserService {
 	
 	public String updateUserById(User user, int id) {
 		try {
+			LOGGER.debug("In updateUserById() function ...");
 			User user1 = dao.findById(id).get();
 			
 			if(user1.getUserId() == id)
@@ -126,7 +133,7 @@ public class UserService {
 	
 	public String changeEmailId(String oldEmail, String newEmail, int id) {
 		try {
-			
+			LOGGER.debug("in changeEmailId() function ...");
 			User user = dao.findById(id).get();
 			
 			if(user.getUserId() == id && user.getEmail().equals(oldEmail))
@@ -142,6 +149,7 @@ public class UserService {
 			}
 			
 		}catch (Exception e) {
+			LOGGER.debug("Error while changing user's email id..");
 			return "Email Updation unsuccessful as user id "+ id + " is not found";	
 		}
 		

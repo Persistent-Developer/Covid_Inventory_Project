@@ -12,12 +12,12 @@ public class RoleService {
 	@Autowired
 	private IRoleDAO dao;
 	
-	public void addRole(Role role)
+	public Role addRole(Role role) throws Exception
 	{
-		dao.save(role);
+		return dao.save(role);
 	}
 	
-	public Role getRole(int id)
+	public Role getRole(int id) throws Exception
 	{
 		return dao.findById(id).get();
 	}

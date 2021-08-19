@@ -70,14 +70,16 @@ public class UserController {
 
 //---------------------------------------------------------------------------
 	@PostMapping("/user/register")
-	public void addUser(@RequestBody User user)
+	public User addUser(@RequestBody User user)
 	{
 		LOGGER.info("Called : /user/register      to add user");
+		User user1 = new User();
 		try {
-			service.addUser(user);
+			user1 = service.addUser(user1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return user1;
 	}
 
 //---------------------------------------------------------------------------

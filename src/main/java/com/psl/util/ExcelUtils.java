@@ -14,8 +14,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+import com.psl.controller.UserController;
 import com.psl.dao.IInventoryDao;
 import com.psl.dao.IUserDAO;
 import com.psl.entity.Inventory;
@@ -27,7 +29,8 @@ import com.psl.entity.User;
 
 public class ExcelUtils {
 	
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExcelUtils.class);
+	
 	private IInventoryDao dao;
 	private IUserDAO udao;
 	
@@ -42,12 +45,13 @@ public class ExcelUtils {
 
 	public  void parseInventoryExcelFile(InputStream is) {
 		try {
+			LOGGER.debug("In parseInventoryExcelFile() method.....");
     		Workbook workbook = new XSSFWorkbook(is);
     		Sheet sheet = workbook.getSheet("Inventory");
     		//System.out.println("**");
     		System.out.println("Sheet is present or not : " + sheet.getSheetName());
     		Iterator<Row> rows = sheet.iterator();	
-    		List<Inventory> lstInventorys = new ArrayList<Inventory>();
+    		//List<Inventory> lstInventorys = new ArrayList<Inventory>();
     		
 			int flag=0;
     		
@@ -182,6 +186,7 @@ public class ExcelUtils {
 	
 	public void parseUserExcelFile(InputStream is) {
 		try {
+			LOGGER.debug("In parseUserExcelFile() method.....");
     		Workbook workbook = new XSSFWorkbook(is);
     		
     			
