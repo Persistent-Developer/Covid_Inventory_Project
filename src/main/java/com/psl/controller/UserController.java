@@ -37,6 +37,7 @@ public class UserController {
 			LOGGER.debug("In getUser controller using id...");
 			usr = service.getUser(id);
 		}catch (Exception e) {
+			LOGGER.debug("In Exception of getUser controller using id...");
 			e.printStackTrace();
 		}
 		return usr;
@@ -50,6 +51,7 @@ public class UserController {
 			LOGGER.debug("In get all User controller...");
 			lstUser = service.getAllUsers();
 		}catch (Exception e) {
+			LOGGER.debug("In Exception of get all User controller...");
 			e.printStackTrace();
 		}
 		return lstUser;
@@ -63,6 +65,7 @@ public class UserController {
 			LOGGER.debug("In get all Customers controller...");
 			lstUser = service.getAllCustomers();
 		}catch (Exception e) {
+			LOGGER.debug("In Exception of get all Customers controller...");
 			e.printStackTrace();
 		}
 		return lstUser;
@@ -75,8 +78,10 @@ public class UserController {
 		LOGGER.info("Called : /user/register      to add user");
 		User user1 = new User();
 		try {
+			LOGGER.debug("In try block of add User controller...");
 			user1 = service.addUser(user1);
 		} catch (Exception e) {
+			LOGGER.debug("In Exception of add User controller...");
 			e.printStackTrace();
 		}
 		return user1;
@@ -88,8 +93,10 @@ public class UserController {
 	public String deleteUserById(@PathVariable int id)
 	{	String msg=null;
 		try {
+			LOGGER.debug("In delete user by Id controller...");
 			msg = service.deleteUserById(id);
 		} catch (Exception e) {
+			LOGGER.debug("In Exception of delete user by Id controller...");
 			e.printStackTrace();
 		}
 		
@@ -104,8 +111,10 @@ public class UserController {
 		LOGGER.info("Called : /user/{id}      to update user by id");
 		String msg=null;
 		try {
+			LOGGER.debug("In try block of update user by Id controller...");
 			msg = service.updateUserById(user,id);
 		} catch (Exception e) {
+			LOGGER.debug("In Exception of update user by Id controller...");
 			e.printStackTrace();
 		}
 		
@@ -121,9 +130,11 @@ public class UserController {
 	  public List<User> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file) {
 		  LOGGER.info("Called : /user/uploadFile      to add multiple users"); 
 		  try {
+			  LOGGER.debug("In try block of update user by Excel file controller...");
 			  service.store(file);
 		  
 		  } catch (Exception e) { 
+			  LOGGER.debug("In Exception of update user by Excel file controller...");
 			  e.printStackTrace(); 
 		  } 
 		  List<User> uList = service.getAllUser();
@@ -143,8 +154,10 @@ public class UserController {
 		
 		String msg=null;
 		try {
+			LOGGER.debug("In try block of change email by Id controller...");
 			msg=service.changeEmailId(oldEmail,newEmail, id);
 		} catch (Exception e) {
+			LOGGER.debug("In Exception of change email by Id controller...");
 			e.printStackTrace();
 		}
 		return msg;

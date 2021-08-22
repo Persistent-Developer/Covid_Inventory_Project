@@ -1,5 +1,7 @@
 package com.psl.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,9 @@ public class OrderService {
 
 	public Orders placeOrder(Orders o) throws Exception {
 		return dao.save(o);
+	}
+	
+	public List<Orders> getAllOrders() throws Exception {
+		return dao.getAllOrders();
 	}
 }

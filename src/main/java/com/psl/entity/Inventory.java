@@ -74,7 +74,7 @@ public class Inventory {
 	private List<Orders> odList= new ArrayList<>();
 	
 	@ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name ="store")
+    @JoinColumn(name ="store_id")
 	private Store store;
 	
 	public Inventory() {

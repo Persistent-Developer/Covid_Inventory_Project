@@ -54,6 +54,7 @@ public class InventoryController {
 		if (inventory.getStore() == null)
 			inventory.setStore(storeService.findById(1));
 		try {
+			LOGGER.debug("In try block of addProducts() function..");
 			item = inventoryService.addProducts(inventory);
 			if (item != null) {
 				response.setResult(item);
@@ -62,6 +63,7 @@ public class InventoryController {
 			}
 		}
 		catch (Exception e) {
+				LOGGER.debug("In Exception of addProducts() function..");
 				response.setstatusMessage(e.getMessage());
 				return new ResponseEntity<Response<Inventory>>(response, HttpStatus.SERVICE_UNAVAILABLE);
 			}
@@ -79,7 +81,7 @@ public class InventoryController {
 		response.setstatusMessage("Data Not Found");
 		List<Inventory> prodList = new ArrayList<>();
 		try {
-			LOGGER.info("Inserting inventory");
+			LOGGER.info("In uploadMultipartFile() function ... ");
 			prodList = inventoryService.store(file);
 			
 			if(prodList.size()<=0)
@@ -95,6 +97,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of uploadMultipartFile() function..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -111,6 +114,7 @@ public class InventoryController {
 		response.setstatusMessage("Unable to update inventory data.");
 		Inventory item = null;
 		try {
+			LOGGER.debug("In try block of updateProducts() function..");
 			item=inventoryService.updateProducts(id,inventory);
 			if (item != null) {
 				response.setResult(item);
@@ -118,6 +122,7 @@ public class InventoryController {
 				response.setstatusMessage("SUCCESS");
 			}
 		} catch (Exception e) {
+			LOGGER.debug("In Exception of updateProducts() function..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.SERVICE_UNAVAILABLE);
 		}
@@ -151,6 +156,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of getAllProducts() function..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 		}	
@@ -158,8 +164,8 @@ public class InventoryController {
 
 	
 	//Get products based on their product id
-	@GetMapping("/inventory/id")
-	public ResponseEntity<Response<Inventory>> getProducts(@PathVariable(name="Prdouct_id") int id)
+	@GetMapping("/inventory/{id}")
+	public ResponseEntity<Response<Inventory>> getProducts(@PathVariable(name="id") int id)
 	{
 		Inventory int1=null;
 		Response<Inventory> response = new Response<Inventory>();
@@ -182,6 +188,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of getProducts() function using id..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -215,6 +222,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of getProducts() function using product code..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<Inventory>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -246,6 +254,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of findAllbyID() function ..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -277,6 +286,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of findAllGroups() function using store id ..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<String>>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -308,6 +318,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of findAllbyCategory() function ..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 		}	 
@@ -354,6 +365,7 @@ public class InventoryController {
 		}
 		catch(Exception e)
 		{
+			LOGGER.debug("In Exception of findByMultipleValues() function ..");
 			response.setstatusMessage(e.getMessage());
 			return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -386,6 +398,7 @@ public class InventoryController {
 			}
 			catch(Exception e)
 			{
+				LOGGER.debug("In Exception of findAllbyGroups() function using group..");
 				response.setstatusMessage(e.getMessage());
 				return new ResponseEntity<Response<List<Inventory>>>(response, HttpStatus.NOT_FOUND);
 			} 
@@ -397,10 +410,12 @@ public class InventoryController {
 	public ResponseEntity<Void> removeProducts(@PathVariable int id)
 	{
 		try{
+			LOGGER.debug("In removeProducts() function ...");
 			inventoryService.removeProducts(id);
 			return ResponseEntity.status(HttpStatus.OK).build();
 		}
 		catch (Exception e) {
+			LOGGER.debug("In Exception of removeProducts() function ...");
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

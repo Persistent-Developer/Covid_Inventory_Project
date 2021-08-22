@@ -52,8 +52,10 @@ public class Store {
 		super();
 	}
 
+	
+
 	public Store(int id, String name, String isActive, int noOfTimeslots, int slotDuration, Set<StoreTime> storeTimings,
-			 Set<StoreHoliday> storeHolidays) {
+			Set<StoreBreaks> breakTimings, Set<StoreHoliday> storeHolidays) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -61,9 +63,10 @@ public class Store {
 		this.noOfTimeslots = noOfTimeslots;
 		this.slotDuration = slotDuration;
 		this.storeTimings = storeTimings;
-	//	this.breakTimings = breakTimings;
+		this.breakTimings = breakTimings;
 		this.storeHolidays = storeHolidays;
 	}
+
 
 
 	public int getId() {
@@ -145,12 +148,13 @@ public class Store {
 		this.storeHolidays = storeHolidays;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Store [id=" + id + ", name=" + name + ", isActive=" + isActive + ", noOfTimeslots=" + noOfTimeslots
-				+ ", slotDuration=" + slotDuration + ", storeTimings=" + storeTimings 
+				+ ", slotDuration=" + slotDuration + ", storeTimings=" + storeTimings + ", breakTimings=" + breakTimings
 				+ ", storeHolidays=" + storeHolidays + "]";
-	}	
+	}
+
+
 	
 }

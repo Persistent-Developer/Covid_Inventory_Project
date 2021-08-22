@@ -25,10 +25,10 @@ public class RoleController {
 	{
 		Role role = new Role();
 		try {
-			LOGGER.debug("In getRole controller...");
+			LOGGER.debug("In getRole() function...");
 			role = service.getRole(id);
 		} catch (Exception e) {
-			
+			LOGGER.debug("In Exception of getRole() function...");
 		}
 		
 		return role;
@@ -42,7 +42,7 @@ public class RoleController {
 		try {
 			role1 = service.addRole(role1);
 		} catch (Exception e) {
-			
+			LOGGER.debug("In Exception of addRole() function...");
 		}
 		
 		return role1;
