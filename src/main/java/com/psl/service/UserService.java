@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +18,10 @@ import com.psl.util.ExcelUtils;
 @Service("UserService")
 public class UserService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-	
 	@Autowired
 	private IUserDAO dao;
 	
-	public User addUser(User user)
+	public void addUser(User user)
 	{
 		Role role = user.getRole();
 		if(role.getRoleId()== 1) {
@@ -37,13 +34,21 @@ public class UserService {
 			role.setRoleName("Customer");
 		}
 
-		return dao.save(user);
+		dao.save(user);
 	}
 
 //---------------------------------------------------------------------------	
 	public User getUser(int id)
 	{
-		return dao.findById(id).get();
+		User user = null ;
+		try {
+		user = dao.findById(id).get();
+		}
+		catch (Exception e) {
+		e.printStackTrace();
+		}
+		
+		return user;
 	}
     
 	public List<User> getAllUsers()
@@ -70,89 +75,98 @@ public class UserService {
 	}
 //---------------------------------------------------------------------------	
 	
-	public String deleteUserById(int id)
+	public void deleteUserById(int id) throws Exception
 	{
-		try {
-			LOGGER.debug("In deleteUserById() function ...");
+		//LOGGER.info("In deleteUserById() function ...");
 		User user = dao.findById(id).get();
 		
 		if(user.getUserId() == id)
 			dao.deleteById(id);
-		
-        return "Deletion Successful";
-		
-		}
-		catch (Exception e) {
-			System.out.println("User with id "+ id + " is not found");
-			
-		return "Deletion unsuccessful as user id "+ id + " is not found" ;
-		}
 	}
 
 //---------------------------------------------------------------------------	
 
 	
+	public List<User> getAllUser() {
+		return (List<User>) dao.findAll();
+	}
 	
-	  public List<User> getAllUser() { 
-		  return (List<User>) dao.findAll(); 
-	  }
-	  
-	  public void store(MultipartFile file) { 
-		  try {
-			  LOGGER.debug("In store() function of user service ...");
-			  ExcelUtils util = new ExcelUtils(dao);
-			  util.parseUserExcelFile(file.getInputStream());
-	  
-	  //List<User> lstUsers = ExcelUtils.parseUserExcelFile(file.getInputStream());
-	  
-	  //dao.saveAll(lstUsers); 
-			  } catch (IOException e) { 
-				  LOGGER.info("Error while parsing user excel file ..");
-				  throw new RuntimeException("FAIL! -> message = " + e.getMessage()); 
-			  } 
-	  }
-	 
-	
-	public String updateUserById(User user, int id) {
+	public void store(MultipartFile file) {
 		try {
-			LOGGER.debug("In updateUserById() function ...");
+			
+			ExcelUtils util = new ExcelUtils(dao);
+			util.parseUserExcelFile(file.getInputStream());
+			
+			//List<User> lstUsers = ExcelUtils.parseUserExcelFile(file.getInputStream());
+			
+    		//dao.saveAll(lstUsers);
+        } catch (IOException e) {
+        	throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+        }
+	}
+	
+	public String updateUserById(User user, int id) throws Exception  {
 			User user1 = dao.findById(id).get();
 			
 			if(user1.getUserId() == id)
 				dao.save(user);
 			
-	        return "updation Successful";
-			
-			}
-			catch (Exception e) {
-				
-			return "Updation unsuccessful as user id "+ id + " is not found" ;
-			}
-		
+	        return "updation Successful";	
 	}
 	
-	public String changeEmailId(String oldEmail, String newEmail, int id) {
-		try {
-			LOGGER.debug("in changeEmailId() function ...");
-			User user = dao.findById(id).get();
-			
-			if(user.getUserId() == id && user.getEmail().equals(oldEmail))
-			{
-				user.setEmail(newEmail);
-				dao.save(user);
-			   //dao.changeEmailId(newEmail, id);
-			   return "New Email \""+ newEmail + "\" is set for user with id " + id;
-			}
-			else
-			{
-				return "check your old Email again";
-			}
-			
-		}catch (Exception e) {
-			LOGGER.debug("Error while changing user's email id..");
-			return "Email Updation unsuccessful as user id "+ id + " is not found";	
+	public String changeEmailId(String oldEmail, String newEmail, int id) throws Exception  {
+	
+		User user = dao.findById(id).get();
+		
+		if(user.getUserId() == id && user.getEmail().equals(oldEmail))
+		{
+			user.setEmail(newEmail);
+			dao.save(user);
+		   //dao.changeEmailId(newEmail, id);
+		   return "New Email \""+ newEmail + "\" is set for user with id " + id;
+		}
+		else
+		{
+			return "check your old Email again";
+		}
+	
+	
+	}
+	
+	public String changePassword(String oldPassword, String newPassword, int id) throws Exception {
+	
+	    User user = dao.findById(id).get();
+		
+		if(user.getUserId() == id && user.getPassword().equals(oldPassword))
+		{
+			user.setPassword(newPassword);
+			dao.save(user);
+		   return "New Password is set for user with id " + id;
+		}
+		else
+		{
+			return "check your old Password again";
 		}
 		
 	}
 	
+	public User findByPhNumber(String phNumber)  {
+		 User user = null; 
+		
+			user = dao.findByPhNumber(phNumber);
+		
+		
+		return user;
+
+	}
+
+	public User findByEmail(String email) {
+		User user = null; 
+		
+		user = dao.findByEmail(email);
+		
+		return user; 
+	}
+		
 }
+

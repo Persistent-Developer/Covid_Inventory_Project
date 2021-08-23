@@ -1,3 +1,4 @@
+
 package com.psl.dao;
 
 import java.util.List;
@@ -13,3 +14,4 @@ public interface IOrderDao extends CrudRepository<Orders, Integer> {
 	@Query(value="select * from orders",nativeQuery = true)
 	public List<Orders> getAllOrders();
 }
+

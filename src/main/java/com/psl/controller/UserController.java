@@ -1,12 +1,17 @@
+
 package com.psl.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.psl.entity.User;
 import com.psl.service.UserService;
+import com.psl.util.Response;
 
 
 @RestController
@@ -29,121 +35,213 @@ public class UserController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 //---------------------------------------------------------------------------
-	@GetMapping("/user/{id}")
-	public User getUser(@PathVariable int id)
+	@GetMapping("/users/{id}")
+	public ResponseEntity<Response<User>> getUser(@PathVariable int id)
 	{
+		Response<User> response = new Response<User>();
 		User usr = new User();
+		
 		try {
 			LOGGER.debug("In getUser controller using id...");
+			
 			usr = service.getUser(id);
+			if(usr == null)
+			{  
+				return new ResponseEntity<Response<User>>(response, HttpStatus.NOT_FOUND);
+			}
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			response.setResult(usr);
+			return new ResponseEntity<Response<User>>(response, HttpStatus.OK);
+		
 		}catch (Exception e) {
-			LOGGER.debug("In Exception of getUser controller using id...");
-			e.printStackTrace();
+			response.setstatusMessage(e.getMessage());
+			response.setStatus(500);
+			return new ResponseEntity<Response<User>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return usr;
+	
 	}
+//---------------------------------------------------------------------------
+	
+	@GetMapping("/user/get/{phNumber}")
+	public ResponseEntity<Response<User>> getUserByPhNumber(@PathVariable String phNumber)
+	{
+		Response<User> response = new Response<User>();
+		User usr = new User();
+		
+		try {
+			LOGGER.debug("In getUser by using phone number api...");
+			usr = service.findByPhNumber(phNumber);
+			if(usr == null)
+			{  
+				return new ResponseEntity<Response<User>>(response, HttpStatus.NOT_FOUND);
+			}
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			response.setResult(usr);
+			return new ResponseEntity<Response<User>>(response, HttpStatus.OK);
+		}
+		
+		catch (Exception e) {
+			response.setstatusMessage(e.getMessage());
+			response.setStatus(500);
+			return new ResponseEntity<Response<User>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+}
+//---------------------------------------------------------------------------	
+
+	@GetMapping("/users/get/{email}")
+	public ResponseEntity<Response<User>> getUserByEmail(@PathVariable String email)
+	{
+		Response<User> response = new Response<User>();
+		User usr = null;
+		
+		try {
+			LOGGER.debug("In getUser by using Email api...");
+			usr = service.findByEmail(email);
+			if(usr == null)
+			{  
+				return new ResponseEntity<Response<User>>(response, HttpStatus.NOT_FOUND);
+			}
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			response.setResult(usr);
+			
+			return new ResponseEntity<Response<User>>(response, HttpStatus.OK);
+		
+		 }
+		catch (Exception e) {
+		    response.setstatusMessage(e.getMessage());
+			response.setStatus(500);
+			return new ResponseEntity<Response<User>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 
 	@GetMapping("/users")
-	public List<User> getAllUsers()
+	public ResponseEntity<Response<List<User>>> getAllUsers()
 	{
-		List<User> lstUser=null;
-		try {
-			LOGGER.debug("In get all User controller...");
-			lstUser = service.getAllUsers();
-		}catch (Exception e) {
-			LOGGER.debug("In Exception of get all User controller...");
-			e.printStackTrace();
+	Response<List<User>> response = new Response<List<User>>();
+	List<User> lstUser=null;
+	try {
+		LOGGER.debug("In get all User controller");
+		lstUser = service.getAllUsers();
+		
+		if(lstUser.size() <= 0)
+		{  
+			return new ResponseEntity<Response<List<User>>>(response, HttpStatus.NOT_FOUND);
 		}
-		return lstUser;
+		
+		response.setStatus(200);
+		response.setstatusMessage("SUCCESS");
+		response.setResult(lstUser);
+		response.setTotalElements(lstUser.size());
+		return new ResponseEntity<Response<List<User>>>(response, HttpStatus.OK);
 	}
+	catch (Exception e) {
+		response.setstatusMessage(e.getMessage());
+		response.setStatus(500);
+		return new ResponseEntity<Response<List<User>>>(response, HttpStatus.INTERNAL_SERVER_ERROR );
+	}
+}
 
 	@GetMapping("/user/customers")
-	public List<User> getAllCustomers()
+	public ResponseEntity<Response<List<User>>> getAllCustomers()
 	{
+		Response<List<User>> response = new Response<List<User>>();
 		List<User> lstUser=null;
 		try {
 			LOGGER.debug("In get all Customers controller...");
 			lstUser = service.getAllCustomers();
-		}catch (Exception e) {
-			LOGGER.debug("In Exception of get all Customers controller...");
-			e.printStackTrace();
+			
+			if(lstUser.size() <= 0)
+			{  
+				return new ResponseEntity<Response<List<User>>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESS");
+			response.setResult(lstUser);
+			response.setTotalElements(lstUser.size());
+			return new ResponseEntity<Response<List<User>>>(response, HttpStatus.OK);
 		}
-		return lstUser;
+		catch (Exception e) {
+			response.setstatusMessage(e.getMessage());
+			response.setStatus(500);
+			return new ResponseEntity<Response<List<User>>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
 	}
 
-//---------------------------------------------------------------------------
 	@PostMapping("/user/register")
-	public User addUser(@RequestBody User user)
+	public void addUser(@RequestBody User user)
 	{
 		LOGGER.info("Called : /user/register      to add user");
-		User user1 = new User();
 		try {
-			LOGGER.debug("In try block of add User controller...");
-			user1 = service.addUser(user1);
+			service.addUser(user);
 		} catch (Exception e) {
-			LOGGER.debug("In Exception of add User controller...");
 			e.printStackTrace();
 		}
-		return user1;
 	}
 
 //---------------------------------------------------------------------------
 
 	@DeleteMapping("/users/{id}")
-	public String deleteUserById(@PathVariable int id)
-	{	String msg=null;
+	public ResponseEntity<Response<String>> deleteUserById(@PathVariable int id)
+	{
+		Response<String> response = new Response<String>();
 		try {
-			LOGGER.debug("In delete user by Id controller...");
-			msg = service.deleteUserById(id);
-		} catch (Exception e) {
-			LOGGER.debug("In Exception of delete user by Id controller...");
-			e.printStackTrace();
-		}
+			
+			service.deleteUserById(id);
+			
+			response.setStatus(200);
+			response.setstatusMessage("SUCCESSFUL DELETION");
+			return new ResponseEntity<Response<String>>(response, HttpStatus.OK);
+
+	    }
 		
-		return msg;
+	    catch (Exception e) {
+	    	response.setstatusMessage("Deletion unsuccessful as user id "+ id + " is not found");
+	    	response.setStatus(500);
+			return new ResponseEntity<Response<String>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+		
 	}
 
 //---------------------------------------------------------------------------
 
-	@PutMapping("/users/{id}")
+	@PatchMapping("/users/{id}")
 	public String updateUserById(@RequestBody User user,@PathVariable int id)
 	{
 		LOGGER.info("Called : /user/{id}      to update user by id");
 		String msg=null;
 		try {
-			LOGGER.debug("In try block of update user by Id controller...");
 			msg = service.updateUserById(user,id);
 		} catch (Exception e) {
-			LOGGER.debug("In Exception of update user by Id controller...");
-			e.printStackTrace();
+			return "Updation unsuccessful as user id "+ id + " is not found" ;
 		}
-		
 		return msg;
+
 	}
 
 
 //---------------------------------------------------------------------------
 
 
-	
-	  @PostMapping("/user/uploadFile") 
-	  public List<User> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file) {
-		  LOGGER.info("Called : /user/uploadFile      to add multiple users"); 
-		  try {
-			  LOGGER.debug("In try block of update user by Excel file controller...");
-			  service.store(file);
-		  
-		  } catch (Exception e) { 
-			  LOGGER.debug("In Exception of update user by Excel file controller...");
-			  e.printStackTrace(); 
-		  } 
-		  List<User> uList = service.getAllUser();
-		  
-	  //return "file updated succesfully"; 
-		  //return service.getAllUser(); 
-		  return uList; 
+	@PostMapping("/user/uploadFile")
+    public List<User> uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file) {
+		LOGGER.info("Called : /user/uploadFile      to add multiple users");
+		try {
+			service.store(file);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<User> uList = service.getAllUser();
+
+		//return "file updated succesfully";
+		//return service.getAllUser();
+		return uList;
 	}
-	 
 
 	@PostMapping("/user/change/emailid/{id}")
 	public String changeEmail(@RequestBody ObjectNode objectNode,@PathVariable int id)
@@ -154,13 +252,28 @@ public class UserController {
 		
 		String msg=null;
 		try {
-			LOGGER.debug("In try block of change email by Id controller...");
 			msg=service.changeEmailId(oldEmail,newEmail, id);
 		} catch (Exception e) {
-			LOGGER.debug("In Exception of change email by Id controller...");
-			e.printStackTrace();
+			return "Email Updation unsuccessful as user id "+ id + " is not found";
 		}
 		return msg;
 	}
 
+	
+	@PostMapping("/user/change/password/{id}")
+	public String changePassword(@RequestBody ObjectNode objectNode,@PathVariable int id) 
+	{
+		String str="";
+		String oldPassword = objectNode.get("Old Password").asText();
+		String newPassword = objectNode.get("New Password").asText();
+		try {
+			 str = service.changePassword(oldPassword,newPassword, id);
+		
+		} catch (Exception e) {
+		return "Password Updation unsuccessful as user id "+ id + " is not found";		
+	  
+	  }
+	  return str;
+	}
 }
+
